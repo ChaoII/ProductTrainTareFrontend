@@ -1,16 +1,10 @@
 <template>
   <div class="login_wrap">
-
     <div class="form_wrap">
       <el-form
           ref="formRef" :model="loginData" label-width="80px" class="demo-dynamic" :rules="rules" style="width: 300px">
         <el-form-item prop="username" label="用户名">
           <el-input v-model="loginData.username" placeholder="请输入用户名">
-            <div>
-              <h1>
-                asd asd asd
-              </h1>
-            </div>
             <template #prefix>
               <el-icon class="el-input__icon">
                 <User/>

@@ -1,5 +1,5 @@
 import {post, get, put, del} from "@/utils/service"
-import type {LoginReq, UserListReq} from "@/api/interface";
+import type {LoginReq, AddUserInterface, QueryInterface, EditUserInterface, DeleteUserInterface} from "@/api/interface";
 
 export const loginApi = (data: LoginReq) => {
     return post({
@@ -8,7 +8,7 @@ export const loginApi = (data: LoginReq) => {
     })
 }
 // 获取用户列表
-export const userListApi = (data: UserListReq) => {
+export const userListApi = (data: QueryInterface) => {
     return get({
         url: "/user/getUser",
         data: data
@@ -16,14 +16,14 @@ export const userListApi = (data: UserListReq) => {
 }
 
 // 新增用户列表
-export const userAddApi = data => {
+export const userAddApi = (data: AddUserInterface) => {
     return put({
         url: "/user/addUser",
         data
     })
 }
 //  用户列表更改状态
-export const userEditApi = data => {
+export const userEditApi = (data: EditUserInterface) => {
     return post({
         url: "user/editUser",
         data
@@ -31,45 +31,10 @@ export const userEditApi = data => {
 }
 
 // 删除用户
-export const userDeleteApi = data => {
+export const userDeleteApi = (data: DeleteUserInterface) => {
     return del({
         url: "user/delUser",
         data
-    })
-}
-
-
-export const attendInfoListApi = data => {
-    return post({
-        url: "attend/getAttendInfos",
-        data
-    })
-
-}
-export const faceListApi = data => {
-    return get({
-        url: "attend/getFaceLibraries",
-        data
-    })
-}
-
-export const addFaceApi = data => {
-    return put({
-        url: "attend/addFaceLibs",
-        data
-    })
-}
-
-export const deleteFaceApi = data => {
-    return del({
-        url: "attend/deleteFace",
-        data
-    })
-}
-
-export const restartApi = data => {
-    return get({
-        url: "attend/restart",
     })
 }
 

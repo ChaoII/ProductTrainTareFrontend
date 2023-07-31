@@ -1,16 +1,14 @@
 import axios from "axios"
 import {global_config} from "/public/config";
 import type {AxiosRequestConfig, Method} from 'axios'
-import {ElLoading} from 'element-plus'
-import {ElMessage} from 'element-plus'
+import {ElLoading, ElMessage} from 'element-plus'
 import useUserInfo from "@/stores/userInfo"
 // 使用create创建axios实例
 let loadingObj: any = null
 export const host: string = global_config.api_host
 const store = useUserInfo()
 
-
-const Service = axios.create({
+const axiosInstance = axios.create({
     timeout: 8000,
     baseURL: host + "/api",
     headers: {
@@ -20,7 +18,7 @@ const Service = axios.create({
     responseType: "json"
 })
 // 请求拦截-增加loading,对请求做统一处理
-Service.interceptors.request.use(config => {
+axiosInstance.interceptors.request.use(config => {
     loadingObj = ElLoading.service({
         lock: true,
         text: 'Loading',
@@ -29,7 +27,7 @@ Service.interceptors.request.use(config => {
     return config
 })
 // 响应拦截-对返回值做统一处理
-Service.interceptors.response.use(response => {
+axiosInstance.interceptors.response.use(response => {
     loadingObj.close()
     const data = response.data
     if (data.code !== 0) {
@@ -49,7 +47,7 @@ Service.interceptors.response.use(response => {
 
 // post请求
 export const post = (config: AxiosRequestConfig) => {
-    return Service({
+    return axiosInstance({
         ...config,
         method: "post",
         data: config.data
@@ -57,7 +55,7 @@ export const post = (config: AxiosRequestConfig) => {
 }
 // get请求
 export const get = (config: AxiosRequestConfig) => {
-    return Service({
+    return axiosInstance({
         ...config,
         method: "get",
         params: config.data,
@@ -65,14 +63,14 @@ export const get = (config: AxiosRequestConfig) => {
 }
 // put请求
 export const put = (config: AxiosRequestConfig) => {
-    return Service({
+    return axiosInstance({
         ...config,
         method: "put",
         data: config.data
     })
 }// delete请求
 export const del = (config: AxiosRequestConfig) => {
-    return Service({
+    return axiosInstance({
         ...config,
         method: "delete"
     })

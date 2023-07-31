@@ -21,6 +21,12 @@
           </el-icon>
           历史数据
         </el-menu-item>
+        <el-menu-item index="/users">
+          <el-icon>
+            <User/>
+          </el-icon>
+          用户管理
+        </el-menu-item>
         <el-menu-item index="/setting">
           <el-icon>
             <Tools/>
@@ -35,17 +41,6 @@
   </div>
 </template>
 <script>
-
-import router from "@/router";
-import {defineComponent} from "vue";
-
-export default defineComponent({
-  methods: {
-    router() {
-      return router
-    }
-  }
-})
 
 </script>
 <style>
