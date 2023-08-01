@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
 import {Search} from '@element-plus/icons-vue'
-import {computed, onActivated, onMounted, reactive, ref} from 'vue'
+import {useRouter} from "vue-router";
+import {onMounted, reactive, ref} from 'vue'
 import {getComingTimeApi, getHistoryApi} from "@/api/history";
 import type {GetHistoryInterface} from "@/api/interface";
 import type {OptionsInterface, TableDataInterface} from "@/page/history/interface";
-
+import {host} from "@/utils/service";
 
 const timeRange = ref<[Date, Date]>([
   new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0),
@@ -21,12 +22,11 @@ const tableData: ref<TableDataInterface[]> = ref([]);
 
 const queryParams: GetHistoryInterface = reactive({
   trainId: "",
-  pageSize: 5,
+  pageSize: 10,
   pageIndex: 1
 });
 
 const tableHeight = ref("600px"); // 默认最大高度为200px
-
 // 动态设置表格最大高度
 const setTableHeight = () => {
   const windowHeight = document.body.clientHeight;
@@ -76,12 +76,21 @@ const getHistory = () => {
   })
 }
 
+const previewImage = (row) => {
+  console.log(row.imgUrl)
+  let imgUrl_ = row.imgUrl.replace(/\\/g, '/')
+  let imgUrl = host + '/' + imgUrl_
+  console.log(host + '/' + imgUrl)
+  window.open(imgUrl, "_blank")
+}
+
 onMounted(() => {
   setTableHeight()
   getHistory()
 })
 // 监听窗口大小变化
 window.addEventListener('resize', setTableHeight);
+
 
 </script>
 <template>
@@ -133,13 +142,17 @@ window.addEventListener('resize', setTableHeight);
       <el-table-column prop="roughWeight" label="载重(t)" width="100"/>
       <el-table-column prop="volume" label="容积(m³)" width="100"/>
       <el-table-column prop="length" label="换长(m)" width="100"/>
-      <el-table-column prop="imgUrl" label="图片地址"/>
+      <el-table-column prop="imgUrl" label="图片地址">
+        <template #default="scope">
+          <el-button link type="primary" size="small" @click="previewImage(scope.row)">查看</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <div style="position: absolute; right: 20px;bottom: 20px; display: flex;justify-content:flex-end">
       <el-pagination
           v-model:current-page="queryParams.pageIndex"
           v-model:page-size="queryParams.pageSize"
-          :page-sizes="[5,10]"
+          :page-sizes="[10,15]"
           :small="true"
           layout="total, sizes, prev, pager, next, jumper"
           :background="true"
