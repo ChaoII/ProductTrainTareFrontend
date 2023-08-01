@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: "/index",
                 name: "index",
-                component: () => import("@/page/index.vue")
+                component: () => import("@/page/home/index.vue")
             },
             {
                 path: "/history",

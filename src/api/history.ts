@@ -16,4 +16,17 @@ export const getHistoryApi = (data: GetHistoryInterface) => {
 }
 
 
+export const getLatestHistoryApi = () => {
+    return get({
+        url: "/train/history/latest",
+    })
+}
+
+export const getLatestPictureApi = () => {
+    return get({
+        url: "/train/picture/latest",
+    })
+}
+
+
 

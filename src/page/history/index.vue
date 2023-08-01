@@ -77,10 +77,8 @@ const getHistory = () => {
 }
 
 const previewImage = (row) => {
-  console.log(row.imgUrl)
   let imgUrl_ = row.imgUrl.replace(/\\/g, '/')
   let imgUrl = host + '/' + imgUrl_
-  console.log(host + '/' + imgUrl)
   window.open(imgUrl, "_blank")
 }
 
