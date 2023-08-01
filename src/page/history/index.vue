@@ -71,6 +71,7 @@ const getHistory = () => {
       optionValue.value = options.value[0].value
       curCount.value = options.value[0].count
       curTrainId.value = options.value[0].trainId
+      updateHistory()
     }
   })
 }
@@ -102,7 +103,7 @@ window.addEventListener('resize', setTableHeight);
       <div style="display: flex; padding-left: 180px">
         <el-text class="mx-1" type="primary">火车进站时间:</el-text>
         <div style="width: 200px;display: flex;padding: 0 10px 0 10px;">
-          <el-select v-model="optionValue" class="m-2" placeholder="Select" @change="changeItem">
+          <el-select v-model="optionValue" class="m-2" placeholder="请选择火车进站时间" @change="changeItem">
             <el-option
                 v-for="(item, index) in options"
                 :key="index"
@@ -123,7 +124,6 @@ window.addEventListener('resize', setTableHeight);
         :stripe="true"
         :data="tableData"
         style="width: 100%"
-        :row-class-name="tableRowClassName"
     >
       <el-table-column type="index" width="50"/>
       <el-table-column prop="dateTime" label="时间" width="180"/>
@@ -144,8 +144,8 @@ window.addEventListener('resize', setTableHeight);
           layout="total, sizes, prev, pager, next, jumper"
           :background="true"
           :total="totalPage"
-          @size-change="searchList"
-          @current-change="searchList"
+          @size-change="updateHistory"
+          @current-change="updateHistory"
       />
     </div>
   </el-card>
