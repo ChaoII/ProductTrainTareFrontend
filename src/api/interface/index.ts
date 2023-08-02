@@ -43,3 +43,10 @@ export interface SettingFormInterface {
     distanceCamera: number
     cameraAddress: string
 }
+
+export interface ModifyPasswordInterface {
+    username:string,
+    oldPassword: string,
+    newPassword: string,
+    confirmPassword: string
+}

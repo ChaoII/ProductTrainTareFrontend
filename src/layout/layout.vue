@@ -1,10 +1,67 @@
 <script setup lang="ts">
-import {Avatar, SwitchButton, Key} from '@element-plus/icons-vue'
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import useUserInfo from "@/stores/userInfo";
 import router from "@/router";
+import {ElMessage, FormInstance, FormRules} from "element-plus";
+import {modifyPasswordApi} from "@/api/users";
+import type {ModifyPasswordInterface} from "@/api/interface";
+import {Platform, Histogram, User, Tools} from '@element-plus/icons-vue'
 
 const store = useUserInfo()
+const dialogModifyVisible = ref(false)
+const passwordModifyForm = ref<FormInstance>()
+const formAddData = ref<ModifyPasswordInterface>({
+  username: store.$state.username,
+  oldPassword: "",
+  newPassword: "",
+  confirmPassword: ""
+})
+const confirmPasswordValidator = (rule, value, callback) => {
+  if (value !== formAddData.value.newPassword) {
+    callback(new Error('两次输入的密码不一致'));
+  } else {
+    callback();
+  }
+}
+
+const rules = reactive<FormRules<ModifyPasswordInterface>>({
+  oldPassword: [
+    {required: true, message: 'Please input old password', trigger: 'blur'},
+    {min: 6, max: 16, message: 'Length should be 6 to 16', trigger: 'blur'},
+  ],
+  newPassword: [
+    {required: true, message: 'Please input old password', trigger: 'blur'},
+    {min: 6, max: 16, message: 'Length should be 6 to 16', trigger: 'blur'},
+  ],
+  confirmPassword: [
+    {required: true, message: 'Please input old password', trigger: 'blur'},
+    {min: 6, max: 16, message: 'Length should be 6 to 16', trigger: 'blur'},
+    {validator: confirmPasswordValidator, trigger: 'blur'},
+  ],
+})
+
+
+const modifyPassword = async () => {
+  const result = await modifyPasswordApi(formAddData.value)
+  console.log(result)
+  if (!result.data) return
+  dialogModifyVisible.value = false
+  // 清空form
+  formAddData.value.oldPassword = ""
+  formAddData.value.newPassword = ""
+  formAddData.value.confirmPassword = ""
+  // 重新更新列表
+  ElMessage.success("修改密码成功，请重新登录!")
+  await logout()
+}
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  const isValid = await formEl?.validate()
+  if (!isValid) {
+    return
+  }
+  await modifyPassword()
+}
 const logout = async () => {
   store.removeToken()
   await router.push("/login")
@@ -54,7 +111,7 @@ const logout = async () => {
         <template #default>
           <div class="center btn-content">
             <div class="popper_btn">
-              <el-button type="primary" link icon="Key">修改密码</el-button>
+              <el-button type="primary" link icon="Key" @click="dialogModifyVisible=true">修改密码</el-button>
             </div>
             <div class="popper_btn">
               <el-button type="primary" link icon="SwitchButton" @click="logout">退出登录</el-button>
@@ -62,9 +119,39 @@ const logout = async () => {
           </div>
         </template>
         <template #reference>
-          <el-button type="primary" icon="Avatar" link>{{ store.$state.username}}</el-button>
+          <el-button type="primary" icon="Avatar" link>{{ store.$state.username }}</el-button>
         </template>
       </el-popover>
+
+      <el-dialog v-model="dialogModifyVisible" title="修改密码">
+        <el-form
+            ref="passwordModifyForm"
+            :model="formAddData"
+            :rules="rules"
+            label-width="180px"
+            label-position="right"
+        >
+          <el-form-item label="旧密码：" prop="oldPassword">
+            <el-input type="password" v-model="formAddData.oldPassword" placeholder="请输入旧密码"/>
+          </el-form-item>
+          <el-form-item label="新密码：" prop="newPassword">
+            <el-input type="password" v-model="formAddData.newPassword" placeholder="请输入新密码"/>
+          </el-form-item>
+          <el-form-item label="确认新密码：" prop="confirmPassword">
+            <el-input type="password" v-model="formAddData.confirmPassword" placeholder="请重复新密码"/>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div>
+            <el-button
+                @click="dialogModifyVisible = false;formAddData.oldPassword='';formAddData.newPassword='';formAddData.confirmPassword=''">
+              取消
+            </el-button>
+            <el-button type="primary" @click="submitForm(passwordModifyForm)">确定</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
     </div>
     <div class="main center">
       <router-view></router-view>

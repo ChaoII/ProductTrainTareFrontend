@@ -6,8 +6,8 @@ import useUserInfo from "@/stores/userInfo"
 // 使用create创建axios实例
 let loadingObj: any = null
 export const host: string = global_config.api_host
-const store = useUserInfo()
 
+const store = useUserInfo()
 const axiosInstance = axios.create({
     timeout: 8000,
     baseURL: host + "/api",

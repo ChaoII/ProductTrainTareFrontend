@@ -1,5 +1,12 @@
 import {post, get, put, del} from "@/utils/service"
-import type {LoginReq, AddUserInterface, QueryInterface, EditUserInterface, DeleteUserInterface} from "@/api/interface";
+import type {
+    LoginReq,
+    AddUserInterface,
+    QueryInterface,
+    EditUserInterface,
+    DeleteUserInterface,
+    ModifyPasswordInterface
+} from "@/api/interface";
 
 export const loginApi = (data: LoginReq) => {
     return post({
@@ -34,6 +41,13 @@ export const userEditApi = (data: EditUserInterface) => {
 export const userDeleteApi = (data: DeleteUserInterface) => {
     return del({
         url: "user/delUser",
+        data
+    })
+}
+
+export const modifyPasswordApi = (data: ModifyPasswordInterface) => {
+    return post({
+        url: "user/modify_password",
         data
     })
 }

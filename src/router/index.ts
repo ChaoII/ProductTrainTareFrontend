@@ -1,6 +1,5 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import type {RouteRecordRaw} from "vue-router";
-import loyout from "@/layout/layout.vue"
 import {useUserInfo} from "@/stores/userInfo";
 
 const routes: Array<RouteRecordRaw> = [
@@ -13,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "home",
-        component: loyout,
+        component: () => import("@/layout/layout.vue"),
         redirect: "/index",
         children: [
             {
@@ -46,14 +45,13 @@ const router = createRouter({
 })
 
 
-
 router.beforeEach((to, form, next) => {
     /**
      * to:从哪个页面
      * from:到哪个页面
      * next:只有执行next()页面才会进行跳转
      */
-    // 判断用户是否登录
+        // 判断用户是否登录
     const store = useUserInfo()
     if (!store.getToken()) {
         // 未登录,跳转到login

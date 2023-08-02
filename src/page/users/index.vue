@@ -42,25 +42,7 @@ const userFormAdd = ref(null)
 const userFormEdit = ref(null)
 
 const total = ref(0)
-const userList = ref([{
-  username: "aichao",
-  nickname: "猪猪"
-}, {
-  username: "aichao",
-  nickname: "猪猪"
-}, {
-  username: "aichao",
-  nickname: "猪猪"
-}, {
-  username: "aichao",
-  nickname: "猪猪"
-}, {
-  username: "aichao",
-  nickname: "猪猪"
-}, {
-  username: "aichao",
-  nickname: "猪猪"
-}])
+const userList = ref([])
 
 const searchList = () => {
   userListApi(queryParams).then(res => {
@@ -76,7 +58,6 @@ const addUser = () => {
 // 新增提交
 const submitForm = (formEl) => {
   // validate
-  console.log(formEl)
   formEl.validate(res => {
     if (!res) {
       return
@@ -170,7 +151,7 @@ onMounted(() => {
           <el-popconfirm
               confirm-button-text="确定"
               cancel-button-text="取消"
-              :icon="Warning"
+              icon="Warning"
               icon-color="#626AEF"
               title="确定删除吗?"
               @confirm="deleteRow(scope.row)"
