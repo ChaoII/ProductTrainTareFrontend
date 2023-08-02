@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {Search,} from '@element-plus/icons-vue'
+import {Search, ArrowLeftBold, ArrowRightBold} from '@element-plus/icons-vue'
 import {onMounted, reactive, ref, watch} from 'vue'
 import {getComingTimeApi, getHistoryApi, getLatestHistoryApi, getLatestPictureApi} from "@/api/history";
 import type {TableDataInterface} from "@/page/home/interface";
@@ -8,10 +8,7 @@ import {host} from "@/utils/service";
 import {OptionsInterface} from "@/page/history/interface";
 import {GetHistoryInterface} from "@/api/interface";
 
-
 const imgSrcList = ref([])
-const cur_case = ref("0")
-const tableData1: ref<TableDataInterface[]> = ref([]);
 const timeRange = ref<[Date, Date]>([
   new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0),
   new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 23, 59, 59)
@@ -172,7 +169,6 @@ watch(imgSrcList, (newValue, oldValue) => {
     nextDisabled.value = true
     nextIndex.value = 0
   }
-
 }, {deep: true})
 
 watch(curIndex, (newValue, oldValue) => {
@@ -185,7 +181,7 @@ watch(curIndex, (newValue, oldValue) => {
     prevDisabled.value = true
     nextDisabled.value = false
   } else if (newValue == imgSrcList.value.length - 1) {
-    prevIndex.value = imgSrcList.value.length
+    prevIndex.value = imgSrcList.value.length - 1
     nextIndex.value = 0
     prevDisabled.value = false
     nextDisabled.value = true
@@ -208,7 +204,7 @@ watch(curIndex, (newValue, oldValue) => {
           <el-image style="width: 100%; height: 300px" :src="latestPictureImage" :fit="'cover'"/>
         </el-col>
         <el-col :span="12">
-          <el-image style="width: 100%;height: 72%" :src="latestHistoryImage" :fit="'cover'"/>
+          <el-image style="width: 100%; height: 72%" :src="latestHistoryImage" :fit="'cover'"/>
           <el-table
               :data="tableData"
               style="width: 100%">
@@ -219,7 +215,6 @@ watch(curIndex, (newValue, oldValue) => {
             <el-table-column prop="volume" label="容积(m³)"/>
             <el-table-column prop="length" label="换长(m)"/>
           </el-table>
-
         </el-col>
       </el-row>
     </el-card>
@@ -257,14 +252,13 @@ watch(curIndex, (newValue, oldValue) => {
         </div>
       </div>
       <el-divider/>
-
-      <div>
+      <div style="padding-bottom: 20px">
         <el-row :gutter="20" :justify="'center'">
           <el-col :span="8" class="el-col_text center">
             <div class="text_container center">剩余{{ prevIndex }}节</div>
           </el-col>
           <el-col :span="8" class="el-col_text center">
-            <div class="text_container center">当前{{ curIndex + 1 }}节</div>
+            <div class="text_container center">当前第{{ curIndex + 1 }}节</div>
           </el-col>
           <el-col :span="8" class="el-col_text center">
             <div class="text_container center">剩余{{ nextIndex }}节</div>
@@ -272,9 +266,9 @@ watch(curIndex, (newValue, oldValue) => {
         </el-row>
       </div>
 
-      <div style="display: flex;width: 100%; height: 300px">
-        <div style="width: 5%; height: 100%;">
-          <el-button class="pre_next_btn" ref="btnPrev" type="primary" :disabled="prevDisabled" @click="prev_">
+      <div style="display: flex; width: 100%; height: 300px">
+        <div class="pre_next_btn_container center">
+          <el-button circle :disabled="prevDisabled" @click="prev_">
             <el-icon>
               <ArrowLeftBold/>
             </el-icon>
@@ -283,8 +277,8 @@ watch(curIndex, (newValue, oldValue) => {
         <div style="width: 90%;height: 100% ;padding-right: 5px">
           <el-image style="height: inherit; width: 100%" :src="imgSrcList[curIndex]" :fit="'cover'"></el-image>
         </div>
-        <div style="width: 5%;height: 100%;">
-          <el-button class="pre_next_btn" ref="btnNext" type="primary" :disabled="nextDisabled" @click="next_">
+        <div class="pre_next_btn_container center">
+          <el-button circle :disabled="nextDisabled" @click="next_">
             <el-icon>
               <ArrowRightBold/>
             </el-icon>
@@ -300,7 +294,8 @@ body {
   margin: 0;
 }
 
-.pre_next_btn {
+.pre_next_btn_container {
+  width: 5%;
   height: 100%;
 }
 
@@ -316,19 +311,6 @@ body {
   text-align: center;
 }
 
-.grid-container1 {
-  height: 60px;
-  display: grid;
-  margin: 12px;
-  grid-template-columns: repeat(6, 1fr); /* 每行六列 */
-  gap: 12px; /* 相邻元素的间隔 */
-}
-
-.grid-item {
-  display: flex;
-  flex-direction: column;
-}
-
 .center {
   display: flex;
   justify-content: center;
@@ -338,58 +320,6 @@ body {
 .content-card {
   width: 60%;
   height: calc(100vh - 52px);
-}
-
-el-carousel {
-  position: relative;
-}
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__arrow--right {
-  pointer-events: none;
-}
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
-}
-
-.el-carousel__arrow {
-  background-color: transparent;
-  color: #fff;
-}
-
-.el-carousel__arrow:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.el-carousel__arrow:hover::before {
-  background-color: transparent;
-}
-
-.el-carousel__arrow.is-disabled {
-  cursor: not-allowed;
-  background-color: transparent;
-  color: #ccc;
-}
-
-.el-row {
-  margin-bottom: 20px;
-}
-
-.el-row:last-child {
-  margin-bottom: 0;
-}
-
-.el-col {
-  border-radius: 4px;
-}
-
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
 }
 
 </style>
