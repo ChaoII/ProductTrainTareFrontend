@@ -34,7 +34,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: "/setting",
                 name: "setting",
-                component: () => import("@/page/setting.vue")
+                component: () => import("@/page/settings/index.vue")
             },
         ]
     }

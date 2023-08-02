@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import {Search} from '@element-plus/icons-vue'
-import {useRouter} from "vue-router";
 import {onMounted, reactive, ref} from 'vue'
 import {getComingTimeApi, getHistoryApi} from "@/api/history";
 import type {GetHistoryInterface} from "@/api/interface";
@@ -35,7 +34,6 @@ const setTableHeight = () => {
 
 const changeItem = (value: any) => {
   const selectedIndex = options.value.findIndex(item => item.value === value);
-  console.log(selectedIndex)
   curCount.value = options.value[selectedIndex].count
   curTrainId.value = options.value[selectedIndex].trainId
   updateHistory()

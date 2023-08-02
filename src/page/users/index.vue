@@ -140,7 +140,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="home-container">
+  <el-card class="content-card">
     <div class="header_query">
       <div class="input_box">
         <el-input
@@ -159,46 +159,46 @@ onMounted(() => {
       </div>
       <el-button type="primary" @click="addUser">新建</el-button>
     </div>
-    <el-card class="users-Content">
-      <el-table :data="userList" style="width: 100%" :table-layout="'fixed'">
-        <el-table-column type="index" width="50"/>
-        <el-table-column prop="username" label="姓名"/>
-        <el-table-column prop="nickname" label="昵称"/>
-        <el-table-column label="操作">
-          <template #default="scope">
-            <el-button type="primary" @click="editRow(scope.row)">编辑</el-button>
-            <el-popconfirm
-                confirm-button-text="确定"
-                cancel-button-text="取消"
-                :icon="Warning"
-                icon-color="#626AEF"
-                title="确定删除吗?"
-                @confirm="deleteRow(scope.row)"
-            >
-              <template #reference>
-                <el-button type="danger">删除</el-button>
-              </template>
-            </el-popconfirm>
+    <el-divider/>
+    <el-table :data="userList" style="width: 100%" :table-layout="'fixed'" :stripe="true">
+      <el-table-column type="index" width="50"/>
+      <el-table-column prop="username" label="姓名"/>
+      <el-table-column prop="nickname" label="昵称"/>
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button type="primary" @click="editRow(scope.row)">编辑</el-button>
+          <el-popconfirm
+              confirm-button-text="确定"
+              cancel-button-text="取消"
+              :icon="Warning"
+              icon-color="#626AEF"
+              title="确定删除吗?"
+              @confirm="deleteRow(scope.row)"
+          >
+            <template #reference>
+              <el-button type="danger">删除</el-button>
+            </template>
+          </el-popconfirm>
 
-          </template>
-        </el-table-column>
-        <!-- mg_state 状态 -->
-      </el-table>
-      <!-- 分页 -->
-      <div class="users-page">
-        <el-pagination
-            v-model:current-page="queryParams.pageIndex"
-            v-model:page-size="queryParams.pageSize"
-            :page-sizes="[5,10]"
-            :small="true"
-            layout="total, sizes, prev, pager, next, jumper"
-            :background="true"
-            :total="total"
-            @size-change="searchList"
-            @current-change="searchList"
-        />
-      </div>
-    </el-card>
+        </template>
+      </el-table-column>
+      <!-- mg_state 状态 -->
+    </el-table>
+    <!-- 分页 -->
+    <div class="users-page">
+      <el-pagination
+          v-model:current-page="queryParams.pageIndex"
+          v-model:page-size="queryParams.pageSize"
+          :page-sizes="[5,10]"
+          :small="true"
+          layout="total, sizes, prev, pager, next, jumper"
+          :background="true"
+          :total="total"
+          @size-change="searchList"
+          @current-change="searchList"
+      />
+    </div>
+
 
     <!-- 新增弹窗 -->
     <el-dialog v-model="dialogAddVisible" title="新建用户">
@@ -252,20 +252,18 @@ onMounted(() => {
         </div>
       </template>
     </el-dialog>
-  </div>
+  </el-card>
 </template>
 
 <style scoped>
-.home-container {
-  position: relative;
+.content-card {
   width: 60%;
   height: calc(100vh - 52px);
-
 }
 
 .header_query {
   display: flex;
-  margin: 10px 0 10px 0;
+  margin: 0 0 20px 0;
 }
 
 .users-page {

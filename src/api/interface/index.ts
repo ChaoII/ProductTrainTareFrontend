@@ -37,3 +37,9 @@ export interface GetHistoryInterface {
     pageSize: number,
     pageIndex: number
 }
+
+export interface SettingFormInterface {
+    distanceSteel: number
+    distanceCamera: number
+    cameraAddress: string
+}
