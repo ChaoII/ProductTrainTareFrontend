@@ -63,7 +63,6 @@ router.beforeEach((to, form, next) => {
     } else {
         next()
     }
-
 })
 
 export default router

@@ -56,9 +56,7 @@ const getHistory = () => {
     endTime: timeRange.value[1]
   }).then(res => {
     if (res.data.history) {
-      console.log(res);
       for (const r of res.data.history) {
-        console.log(r)
         options.value.push({
           trainId: r.trainId,
           label: r.comingTime,
@@ -86,7 +84,6 @@ onMounted(() => {
 })
 // 监听窗口大小变化
 window.addEventListener('resize', setTableHeight);
-
 
 </script>
 <template>

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import {toRefs, reactive, ref, onMounted} from 'vue'
+import {reactive, ref, onMounted} from 'vue'
 import {userListApi, userAddApi, userEditApi, userDeleteApi} from "@/api/users"
 import {ElMessage} from "element-plus";
-import {Warning} from '@element-plus/icons-vue'
-
 
 const queryParams = reactive({
   searchName: "",

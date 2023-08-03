@@ -37,10 +37,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await updateSettings()
 }
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
+
 </script>
 <template>
   <el-card class="content-card">
@@ -50,13 +47,13 @@ const resetForm = (formEl: FormInstance | undefined) => {
         label-width="180px"
         status-icon
     >
-      <el-form-item label="磁钢-磁钢间距：" prop="name">
+      <el-form-item label="磁钢-磁钢间距：" prop="distanceSteel">
         <el-input v-model="ruleForm.distanceSteel"/>
       </el-form-item>
-      <el-form-item label="磁钢-摄像头间距：" prop="name">
+      <el-form-item label="磁钢-摄像头间距：" prop="distanceCamera">
         <el-input v-model="ruleForm.distanceCamera"/>
       </el-form-item>
-      <el-form-item label="摄像头访问地址：" prop="name">
+      <el-form-item label="摄像头访问地址：" prop="cameraAddress">
         <div style="width: 100%; display: flex">
           <el-input style="padding-right: 20px" v-model="ruleForm.cameraAddress"/>
           <el-button type="primary" @click="jumpLink">跳转</el-button>
