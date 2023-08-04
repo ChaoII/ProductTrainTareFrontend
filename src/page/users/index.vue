@@ -2,6 +2,7 @@
 import {reactive, ref, onMounted} from 'vue'
 import {userListApi, userAddApi, userEditApi, userDeleteApi} from "@/api/users"
 import {ElMessage} from "element-plus";
+import type {FormInstance} from 'element-plus'
 
 const queryParams = reactive({
   searchName: "",
@@ -36,8 +37,8 @@ const rules = reactive({
   ],
 })
 
-const userFormAdd = ref(null)
-const userFormEdit = ref(null)
+const userFormAdd = ref<FormInstance>()
+const userFormEdit = ref<FormInstance>()
 
 const total = ref(0)
 const userList = ref([])
@@ -54,46 +55,43 @@ const addUser = () => {
   dialogAddVisible.value = true
 }
 // 新增提交
-const submitForm = (formEl) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
   // validate
-  formEl.validate(res => {
-    if (!res) {
-      return
-    }
-    // 表单通过请求接口
-    userAddApi(formAddData).then(res => {
-      if (res.data) {
-        // 隐藏弹窗
-        dialogAddVisible.value = false
-        // 清空form
-        formAddData.nickname = ""
-        formAddData.password = ""
-        formAddData.username = ""
-        // 重新更新列表
-        searchList()
-        ElMessage.success("新增用户成功!")
-      }
-    })
-  })
+  const validated = formEl?.validate
+  if (!validated) {
+    return
+  }
+  // 表单通过请求接口
+  const res = await userAddApi(formAddData)
+  if (res.data) {
+    // 隐藏弹窗
+    dialogAddVisible.value = false
+    // 清空form
+    formAddData.nickname = ""
+    formAddData.password = ""
+    formAddData.username = ""
+    // 重新更新列表
+    searchList()
+    ElMessage.success("新增用户成功!")
+  }
 }
 // 修改提交
-const submitEForm = (formEl) => {
-  formEl.validate(res => {
-    if (!res) {
-      console.log(res)
-      return
+const submitEForm = async (formEl: FormInstance | undefined) => {
+  const res = await formEl?.validate
+  if (!res) {
+    console.log(res)
+    return
+  }
+  // 提交修改
+  userEditApi(formEditData).then(res => {
+    if (res.data) {
+      dialogEditVisible.value = false;
+      searchList()
     }
-    // 提交修改
-    userEditApi(formEditData).then(res => {
-      if (res.data) {
-        dialogEditVisible.value = false;
-        searchList()
-      }
-    })
   })
 }
 // 数据编辑
-const editRow = row => {
+const editRow = (row: any) => {
   const {id, username, nickname} = row
   // 展示编辑表单
   dialogEditVisible.value = true;
@@ -102,7 +100,7 @@ const editRow = row => {
   formEditData.id = id
 }
 // 删除数据
-const deleteRow = row => {
+const deleteRow = (row: any) => {
   const data = {"id": row.id}
   console.log(data)
   // eslint-disable-next-line no-unused-vars

@@ -1,5 +1,5 @@
 import axios from "axios"
-import {global_config} from "/public/config";
+import {global_config} from "@/../public/config";
 import type {AxiosRequestConfig, Method} from 'axios'
 import {ElLoading, ElMessage} from 'element-plus'
 import useUserInfo from "@/stores/userInfo"

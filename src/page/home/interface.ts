@@ -6,7 +6,6 @@ export interface OptionsInterface {
 }
 
 export interface TableDataInterface {
-    dateTime: string,
     trainMode: string,
     trainNum: string,
     deadWeight: number,

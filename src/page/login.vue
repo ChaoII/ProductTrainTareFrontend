@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import {reactive, ref} from 'vue'
+import {loginApi} from "@/api/users"
+import {useRouter} from "vue-router";
+import useUserInfo from "@/stores/userInfo";
+import {Key, User} from '@element-plus/icons-vue'
+import type {FormRules} from "element-plus";
+
+const store = useUserInfo()
+const router = useRouter()
+
+interface LoginInterface {
+  username: string,
+  password: string
+}
+
+const loginData = ref<LoginInterface>({
+  username: "",
+  password: ""
+})
+const rules = reactive<FormRules<LoginInterface>>({
+  "username": [{required: true, message: "用户名不能为空", trigger: "blur"}],
+  "password": [{required: true, message: "密码不能为空", trigger: "blur"}]
+})
+
+const handleLogin = async () => {
+  // 请求后台接口
+  const res = await loginApi(loginData.value)
+  if (res) {
+    store.setUserInfo(res.data);
+    await router.push({
+      path: "/index"
+    })
+  }
+}
+</script>
+
 <template>
   <div class="login_wrap">
     <div class="form_wrap">
@@ -28,52 +65,12 @@
     </div>
   </div>
 </template>
-<script>
-import {reactive, toRefs} from 'vue'
-import {loginApi} from "@/api/users"
-import {useRouter} from "vue-router";
-import useUserInfo from "@/stores/userInfo";
-import {Key, User} from '@element-plus/icons-vue'
 
-
-export default {
-  name: "login",
-  setup() {
-    const store = useUserInfo()
-    const router = useRouter()
-    const data = reactive({
-      loginData: {
-        username: "",
-        password: ""
-      },
-      rules: {
-        "username": [{required: true, message: "用户名不能为空", trigger: "blur"}],
-        "password": [{required: true, message: "密码不能为空", trigger: "blur"}]
-      }
-    })
-    const handleLogin = () => {
-      // 请求后台接口
-      loginApi(data.loginData).then(res => {
-        if (res) {
-          store.setUserInfo(res.data);
-          console.log(store.getToken())
-          // 跳转/user
-          router.push({
-            path: "/index"
-          })
-        }
-      })
-    }
-
-    return {
-      Key,
-      ...toRefs(data),
-      handleLogin
-    }
-  }
+<style>
+body {
+  padding: 0;
+  margin: 0;
 }
-</script>
-<style scoped>
 .login_wrap {
   width: 100%;
   height: 100vh;

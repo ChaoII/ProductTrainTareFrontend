@@ -2,7 +2,8 @@
 import {reactive, ref} from "vue";
 import useUserInfo from "@/stores/userInfo";
 import router from "@/router";
-import {ElMessage, FormInstance, FormRules} from "element-plus";
+import {ElMessage} from "element-plus";
+import type {FormInstance, FormRules} from "element-plus";
 import {modifyPasswordApi} from "@/api/users";
 import type {ModifyPasswordInterface} from "@/api/interface";
 import {Platform, Histogram, User, Tools} from '@element-plus/icons-vue'
@@ -16,7 +17,7 @@ const formAddData = ref<ModifyPasswordInterface>({
   newPassword: "",
   confirmPassword: ""
 })
-const confirmPasswordValidator = (rule, value, callback) => {
+const confirmPasswordValidator = (rule: any, value: any, callback: any) => {
   if (value !== formAddData.value.newPassword) {
     callback(new Error('两次输入的密码不一致'));
   } else {

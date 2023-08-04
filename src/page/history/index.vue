@@ -2,6 +2,7 @@
 
 import {Search} from '@element-plus/icons-vue'
 import {onMounted, reactive, ref} from 'vue'
+import type {Ref} from 'vue'
 import {getComingTimeApi, getHistoryApi} from "@/api/history";
 import type {GetHistoryInterface} from "@/api/interface";
 import type {OptionsInterface, TableDataInterface} from "@/page/history/interface";
@@ -16,8 +17,8 @@ const totalPage = ref(0)
 const curCount = ref(0)
 const curTrainId = ref("")
 const optionValue = ref("")
-const options: ref<OptionsInterface[]> = ref([]);
-const tableData: ref<TableDataInterface[]> = ref([]);
+const options: Ref<OptionsInterface[]> = ref([]);
+const tableData: Ref<TableDataInterface[]> = ref([]);
 
 const queryParams: GetHistoryInterface = reactive({
   trainId: "",
@@ -72,7 +73,7 @@ const getHistory = () => {
   })
 }
 
-const previewImage = (row) => {
+const previewImage = (row: any) => {
   let imgUrl_ = row.imgUrl.replace(/\\/g, '/')
   let imgUrl = host + '/' + imgUrl_
   window.open(imgUrl, "_blank")
