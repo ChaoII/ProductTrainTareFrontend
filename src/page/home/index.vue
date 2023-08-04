@@ -94,9 +94,10 @@ const latestHistoryImage = ref("")
 
 const timer: Ref<number> = ref(0);
 const startTimer = async () => {
-  timer.value = window.setInterval(async () => {
-    await latestImageHandler()
-    await latestHistoryInfo()
+  timer.value = window.setTimeout(async () => {
+    // await latestImageHandler()
+    // await latestHistoryInfo()
+    await startTimer();
   }, 1000)
 }
 

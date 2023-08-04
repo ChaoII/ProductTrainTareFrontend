@@ -72,6 +72,7 @@ const logout = async () => {
 
 <template>
   <div class="outer">
+
     <div class="header">
       <el-menu class="menu center"
                :default-active="$route.path"
@@ -123,7 +124,6 @@ const logout = async () => {
           <el-button type="primary" icon="Avatar" link>{{ store.$state.username }}</el-button>
         </template>
       </el-popover>
-
       <el-dialog v-model="dialogModifyVisible" title="修改密码">
         <el-form
             ref="passwordModifyForm"
@@ -152,7 +152,6 @@ const logout = async () => {
           </div>
         </template>
       </el-dialog>
-
     </div>
     <div class="main center">
       <router-view></router-view>
