@@ -5,6 +5,7 @@ import {useRouter} from "vue-router";
 import useUserInfo from "@/stores/userInfo";
 import {Key, User} from '@element-plus/icons-vue'
 import type {FormRules} from "element-plus";
+import {ElLoading} from "element-plus";
 
 const store = useUserInfo()
 const router = useRouter()
@@ -23,6 +24,7 @@ const rules = reactive<FormRules<LoginInterface>>({
   "password": [{required: true, message: "密码不能为空", trigger: "blur"}]
 })
 
+
 const handleLogin = async () => {
   // 请求后台接口
   const res = await loginApi(loginData.value)
@@ -31,6 +33,7 @@ const handleLogin = async () => {
     await router.push({
       path: "/index"
     })
+    window.location.reload()
   }
 }
 </script>
@@ -71,6 +74,7 @@ body {
   padding: 0;
   margin: 0;
 }
+
 .login_wrap {
   width: 100%;
   height: 100vh;
