@@ -41,6 +41,7 @@ export interface GetHistoryInterface {
 export interface SettingFormInterface {
     distanceSteel: number
     distanceCamera: number
+    deviceName:string
     cameraAddress: string
 }
 

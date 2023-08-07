@@ -1,10 +1,9 @@
 import axios from "axios"
 import {global_config} from "@/../public/config";
-import type {AxiosRequestConfig, Method} from 'axios'
+import type {AxiosRequestConfig} from 'axios'
 import {ElLoading, ElMessage} from 'element-plus'
 import useUserInfo from "@/stores/userInfo"
 // 使用create创建axios实例
-let loadingObj: any = null
 export const host: string = global_config.api_host
 const store = useUserInfo()
 axios.defaults.headers.common['token'] = store.getToken()
@@ -19,17 +18,12 @@ const axiosInstance = axios.create({
 })
 // 请求拦截-增加loading,对请求做统一处理
 axiosInstance.interceptors.request.use(config => {
-    // loadingObj = ElLoading.service({
-    //     lock: true,
-    //     text: 'Loading',
-    //     background: 'rgba(0, 0, 0, 0.7)',
-    // })
+
     return config
 })
 
 // 响应拦截-对返回值做统一处理
 axiosInstance.interceptors.response.use(response => {
-    // loadingObj.close()
     const data = response.data
     if (data.code !== 0) {
         ElMessage.error(data.msg || "服务器出错")
@@ -38,7 +32,6 @@ axiosInstance.interceptors.response.use(response => {
     }
     return data
 }, error => {
-    loadingObj.close()
     ElMessage({
         message: "服务器错误",
         type: "error",

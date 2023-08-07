@@ -3,11 +3,13 @@ import {onMounted, reactive, ref} from 'vue'
 import type {FormInstance} from 'element-plus'
 import type {SettingFormInterface} from "@/api/interface";
 import {getSettingsApi, updateSettingApi} from "@/api/settings";
+import {ElMessage} from "element-plus";
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<SettingFormInterface>({
   distanceSteel: 10,
   distanceCamera: 12,
+  deviceName:"umf32-1",
   cameraAddress: "http://127.0.0.1:64"
 })
 
@@ -20,6 +22,7 @@ const getSettings = async () => {
   if (result.data) {
     ruleForm.distanceSteel = result.data.distanceSteel
     ruleForm.distanceCamera = result.data.distanceCamera
+    ruleForm.deviceName = result.data.deviceName
     ruleForm.cameraAddress = result.data.cameraAddress
   }
 }
@@ -31,6 +34,7 @@ const jumpLink = async () => {
 const updateSettings = async () => {
   await updateSettingApi(ruleForm)
   await getSettings()
+  ElMessage.success("更新成功")
 }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
@@ -47,6 +51,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         label-width="180px"
         status-icon
     >
+      <el-form-item label="设备名称：" prop="deviceName">
+        <el-input v-model="ruleForm.deviceName"/>
+      </el-form-item>
       <el-form-item label="磁钢-磁钢间距：" prop="distanceSteel">
         <el-input v-model="ruleForm.distanceSteel"/>
       </el-form-item>

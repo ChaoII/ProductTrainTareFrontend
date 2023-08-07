@@ -3,5 +3,5 @@ export interface GlobalConfig {
 }
 
 export const global_config: GlobalConfig = {
-    "api_host": "http://127.0.0.1:8090/"
+    "api_host": "http://127.0.0.1:8090"
 }
