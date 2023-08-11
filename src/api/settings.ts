@@ -15,3 +15,9 @@ export const getSettingsApi = () => {
         url: "/get_settings",
     })
 }
+
+export const restartDeviceApi = () => {
+    return get({
+        url: "/restart_device",
+    })
+}
