@@ -1,10 +1,10 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import {onMounted, onUnmounted, reactive, ref} from 'vue'
-import type {Action, FormInstance} from 'element-plus'
+import type {Ref} from 'vue'
+import type {FormInstance} from 'element-plus'
 import type {SettingFormInterface} from "@/api/interface";
 import {getSettingsApi, restartDeviceApi, updateSettingApi} from "@/api/settings";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {Ref} from "vue/dist/vue";
 
 
 const dateTime = ref<Date>()

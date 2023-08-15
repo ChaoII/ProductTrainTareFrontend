@@ -1,5 +1,5 @@
 import {post, get, put, del} from "@/utils/service"
-import type {GetComingTimeInterface, GetHistoryInterface} from "@/api/interface";
+import type {GetComingTimeInterface, GetHistoryInterface, UpdateHistoryInterface} from "@/api/interface";
 
 export const getComingTimeApi = (data: GetComingTimeInterface) => {
     return post({
@@ -15,18 +15,13 @@ export const getHistoryApi = (data: GetHistoryInterface) => {
     })
 }
 
-
-export const getLatestHistoryApi = () => {
-    return get({
-        url: "/train/history/latest",
+export const updateHistoryApi = (data: UpdateHistoryInterface) => {
+    return post({
+        url: "/train/update_history",
+        data: data
     })
 }
 
-export const getLatestPictureApi = () => {
-    return get({
-        url: "/train/picture/latest",
-    })
-}
 
 
 

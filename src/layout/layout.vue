@@ -88,12 +88,6 @@ const logout = async () => {
           </el-icon>
           实时展示
         </el-menu-item>
-        <el-menu-item index="/history">
-          <el-icon>
-            <Histogram/>
-          </el-icon>
-          历史数据
-        </el-menu-item>
         <el-menu-item index="/users">
           <el-icon>
             <User/>

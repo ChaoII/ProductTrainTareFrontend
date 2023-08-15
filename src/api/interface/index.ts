@@ -51,3 +51,13 @@ export interface ModifyPasswordInterface {
     newPassword: string,
     confirmPassword: string
 }
+
+export interface UpdateHistoryInterface {
+    id:string,
+    trainMode: string,
+    trainNum: string,
+    deadWeight: number,
+    roughWeight: number,
+    volume: number,
+    length: number,
+}
