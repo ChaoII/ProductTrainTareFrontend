@@ -7,19 +7,24 @@ import {getSettingsApi, restartDeviceApi, updateSettingApi} from "@/api/settings
 import {ElMessage, ElMessageBox} from "element-plus";
 
 
-const dateTime = ref<Date>()
+const curDateTime = ref<Date>()
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<SettingFormInterface>({
   distanceSteel: 0,
   distanceCamera: 0,
-  deviceName: "",
-  cameraAddress: ""
+  deviceName: "-",
+  cameraAddress: "-",
+  customParam: "-",
+  currentDateTime: new Date(),
+  deviceVersion: "-",
+  algorithmVersion: "-",
+  systemVersion: "-",
 })
 
 const timer: Ref<number> = ref(0);
 const startTimer = async () => {
   timer.value = window.setInterval(async () => {
-    dateTime.value = new Date()
+    ruleForm.currentDateTime = new Date()
   }, 1000)
 }
 
@@ -29,7 +34,7 @@ const stopTimer = async () => {
 
 
 onMounted(async () => {
-  dateTime.value = new Date()
+  ruleForm.currentDateTime = new Date()
   await startTimer();
   await getSettings();
 })
@@ -44,6 +49,10 @@ const getSettings = async () => {
     ruleForm.distanceCamera = result.data.distanceCamera
     ruleForm.deviceName = result.data.deviceName
     ruleForm.cameraAddress = result.data.cameraAddress
+    ruleForm.customParam = result.data.customParam
+    ruleForm.deviceVersion = result.data.deviceVersion
+    ruleForm.algorithmVersion = result.data.algorithmVersion
+    ruleForm.systemVersion = result.data.systemVersion
   }
 }
 
@@ -80,6 +89,10 @@ const open = async () => {
   })
 }
 
+const modifyDateTime = async () => {
+  await stopTimer()
+}
+
 </script>
 <template>
   <el-card class="content-card">
@@ -93,16 +106,14 @@ const open = async () => {
         <el-input v-model="ruleForm.deviceName"/>
       </el-form-item>
       <el-form-item label="磁钢-磁钢间距：" prop="distanceSteel">
-        <div style="width: 100%; display: flex">
-          <el-input style="padding-right: 20px" v-model="ruleForm.distanceSteel"/>
-          <el-text type="primary" style="white-space: nowrap;">厘米</el-text>
-        </div>
+        <el-input v-model="ruleForm.distanceSteel">
+          <template #append>厘米</template>
+        </el-input>
       </el-form-item>
       <el-form-item label="磁钢-摄像头间距：" prop="distanceCamera">
-        <div style="width: 100%; display: flex">
-          <el-input style="padding-right: 20px" v-model="ruleForm.distanceCamera"/>
-          <el-text type="primary" style="white-space: nowrap;">厘米</el-text>
-        </div>
+        <el-input v-model="ruleForm.distanceCamera">
+          <template #append>厘米</template>
+        </el-input>
       </el-form-item>
       <el-form-item label="摄像头访问地址：" prop="cameraAddress">
         <div style="width: 100%; display: flex">
@@ -110,26 +121,27 @@ const open = async () => {
           <el-button type="primary" @click="jumpLink">跳转</el-button>
         </div>
       </el-form-item>
-      <el-form-item label="参数因子：" prop="distanceCamera">
-        <el-input v-model="ruleForm.distanceCamera"/>
+      <el-form-item label="参数因子：" prop="customParam">
+        <el-input v-model="ruleForm.customParam"/>
       </el-form-item>
-      <el-form-item label="时间设置：" prop="distanceCamera">
+      <el-form-item label="时间设置：" prop="currentDateTime">
         <div>
           <el-date-picker
-              v-model="dateTime"
+              v-model="ruleForm.currentDateTime"
               type="datetime"
               format="YYYY-MM-DD HH:mm:ss"
+              @focus="modifyDateTime"
           />
         </div>
       </el-form-item>
-      <el-form-item label="设备版本号：" prop="distanceCamera">
-        <el-input v-model="ruleForm.distanceCamera"/>
+      <el-form-item label="设备版本号：" prop="deviceVersion">
+        <el-input v-model="ruleForm.deviceVersion"/>
       </el-form-item>
-      <el-form-item label="算法版本：" prop="distanceCamera">
-        <el-input v-model="ruleForm.distanceCamera"/>
+      <el-form-item label="算法版本：" prop="algorithmVersion">
+        <el-input v-model="ruleForm.algorithmVersion"/>
       </el-form-item>
-      <el-form-item label="系统版本：" prop="distanceCamera">
-        <el-input v-model="ruleForm.distanceCamera"/>
+      <el-form-item label="系统版本：" prop="systemVersion">
+        <el-input v-model="ruleForm.systemVersion"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">

@@ -161,6 +161,7 @@ const tempTableData1: Ref<TableDataInterface[]> = ref([])
 const timer: Ref<number> = ref(0);
 onMounted(async () => {
   await setTableHeight();
+  await setVideoWidth();
   await initBtn()
 })
 
@@ -168,7 +169,8 @@ onMounted(async () => {
 const curIndex = ref(0)
 const prevIndex = ref(0)
 const nextIndex = ref(0)
-
+const prevDisabled = ref(false)
+const nextDisabled = ref(false)
 const prev_ = () => {
   if (curIndex.value == 0) {
     prevDisabled.value = true
@@ -185,8 +187,7 @@ const next_ = () => {
   curIndex.value++;
 }
 
-const prevDisabled = ref(false)
-const nextDisabled = ref(false)
+
 
 const initBtn = async () => {
   if (tempTableData1.value.length == 0) {

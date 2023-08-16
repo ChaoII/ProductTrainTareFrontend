@@ -41,19 +41,24 @@ export interface GetHistoryInterface {
 export interface SettingFormInterface {
     distanceSteel: number
     distanceCamera: number
-    deviceName:string
+    deviceName: string
     cameraAddress: string
+    customParam: string
+    currentDateTime: Date
+    deviceVersion: string
+    algorithmVersion: string
+    systemVersion: string
 }
 
 export interface ModifyPasswordInterface {
-    username:string,
+    username: string,
     oldPassword: string,
     newPassword: string,
     confirmPassword: string
 }
 
 export interface UpdateHistoryInterface {
-    id:string,
+    id: string,
     trainMode: string,
     trainNum: string,
     deadWeight: number,

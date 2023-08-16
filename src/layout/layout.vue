@@ -119,7 +119,7 @@ const logout = async () => {
             </div>
           </template>
           <template #reference>
-            <el-button type="primary" icon="Avatar" link>{{ store.$state.nickname }}</el-button>
+            <el-button type="primary" icon="Avatar" link>{{ store.$state.username }}</el-button>
           </template>
         </el-popover>
         <el-dialog v-model="dialogModifyVisible" title="修改密码">
