@@ -8,6 +8,8 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import 'dayjs/locale/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import vue3videoPlay from "vue3-video-play"; // 引入组件
+import "vue3-video-play/dist/style.css"; // 引入css
 
 
 const app = createApp(App)
@@ -17,7 +19,7 @@ pina.use(piniaPluginPersistedstate)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
-
+app.use(vue3videoPlay)
 app.use(ElementPlus, {locale: zhCn})
 app.use(router)
 app.use(pina)

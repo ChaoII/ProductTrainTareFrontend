@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import type {UserInfo} from '@/stores/interface'
+import type {AuthInfo, UserInfo} from '@/stores/interface'
 
 export const useUserInfo = defineStore('userInfo', {
     state: (): UserInfo => {
@@ -28,5 +28,44 @@ export const useUserInfo = defineStore('userInfo', {
         key: "userInfo",
     },
 })
+
+
+export const useAuthStore = defineStore('authInfo', {
+    state: (): AuthInfo => {
+        return {
+            isRemember: false,
+            username: '',
+            password: ''
+        }
+    },
+    actions: {
+        saveRememberedCredentials() {
+            // 登录逻辑...
+            if (this.isRemember) {
+                // 将用户名和密码保存到本地存储
+                localStorage.setItem('rememberedUsername', this.username);
+                localStorage.setItem('rememberedPassword', this.password);
+            } else {
+                // 移除本地存储中的用户名和密码
+                localStorage.removeItem('rememberedUsername');
+                localStorage.removeItem('rememberedPassword');
+            }
+        },
+        loadRememberedCredentials() {
+            // 从本地存储中加载保存的用户名和密码
+            const rememberedUsername = localStorage.getItem('rememberedUsername');
+            const rememberedPassword = localStorage.getItem('rememberedPassword');
+            if (rememberedUsername && rememberedPassword) {
+                this.isRemember = true;
+                this.username = rememberedUsername;
+                this.password = rememberedPassword;
+            }
+        }
+    },
+    persist: {
+        key: "authInfo",
+    },
+})
+
 
 export default useUserInfo

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
-import {Search, ArrowLeftBold, ArrowRightBold} from '@element-plus/icons-vue'
-import {nextTick, onMounted, reactive, ref, watch} from 'vue'
+import {ArrowLeftBold, ArrowRightBold, Search} from '@element-plus/icons-vue'
 import type {Ref} from 'vue'
+import {onMounted, reactive, ref, watch} from 'vue'
 import {getComingTimeApi, getHistoryApi, updateHistoryApi} from "@/api/history";
 import type {OptionsInterface, TableDataInterface} from "@/page/home/interface";
 import {host} from "@/utils/service";
 import type {GetHistoryInterface, UpdateHistoryInterface} from "@/api/interface";
-import {ElMessage} from "element-plus";
 import type {FormInstance, FormRules} from "element-plus";
+import {ElMessage} from "element-plus";
 
 const currentDate = new Date()
 const currentDay = currentDate.getDate();
@@ -24,7 +24,7 @@ const curCount = ref(0)
 const curTrainId = ref("")
 const curImgUrl = ref("")
 const trainDataDetail: Ref<UpdateHistoryInterface> = ref({
-  id:"",
+  id: "",
   trainMode: "-",
   trainNum: "-",
   deadWeight: 0.0,
@@ -42,13 +42,14 @@ const setTableHeight = async () => {
     tableHeight.value = ele.offsetHeight - 200;
   }
 };
-window.addEventListener('resize', setTableHeight);
+
 const getHistory = async () => {
   const res = await getComingTimeApi({
     startTime: dateTimeStart.value,
     endTime: dateTimeEnd.value
   })
   if (res.data.history) {
+    options.value.length = 0
     for (const r of res.data.history) {
       options.value.push({
         trainId: r.trainId,
@@ -234,13 +235,55 @@ watch(curIndex, (newValue, oldValue) => {
   curImgUrl.value = tempTableData1.value[curIndex.value].imgUrl
 }, {deep: true})
 
+const videoElement = ref<HTMLElement | null>(null);
+const videoWidth = ref(0)
+const setVideoWidth = async () => {
+  const ele = videoElement.value as HTMLElement;
+  if (ele) {
+    videoWidth.value = ele.offsetWidth;
+    playerOptions.width = `${videoWidth.value}px`
+  }
+}
+window.addEventListener('resize', setTableHeight);
+window.addEventListener('resize', setVideoWidth);
+
+const url = ref("http://127.0.0.1:8090/video/juren.mp4")
+const playerOptions = reactive({
+  width: "550px",
+  height: "300px", //播放器高度
+  color: "#409eff", //主题色
+  title: "", //视频名称
+  src: "http://127.0.0.1:8090/video/juren.mp4", //视频源
+  muted: false, //静音
+  webFullScreen: false,
+  speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
+  autoPlay: false, //自动播放
+  loop: false, //循环播放
+  mirror: false, //镜像画面
+  ligthOff: false, //关灯模式
+  volume: 0.3, //默认音量大小
+  control: true, //是否显示控制
+  controlBtns: [
+    "audioTrack",
+    "quality",
+    "speedRate",
+    "volume",
+    "setting",
+    "pip",
+  ], //显示所有按钮,
+});
+
+
 </script>
 <template>
   <el-card class="content-card">
     <el-card style="height: 300px" :body-style="{ padding: '0px' }">
       <el-row :gutter="8">
         <el-col :span="12">
-          <el-image style="width: 100%; height: 300px" :src="''" :fit="'cover'"/>
+          <div ref="videoElement" style="width: 100%;height: 300px">
+            <vue3VideoPlay style="width: 100%;height: 300px" v-bind="playerOptions"
+                           :poster="url"></vue3VideoPlay>
+          </div>
         </el-col>
         <el-col :span="12">
           <div style="display: flex ;height: 300px">

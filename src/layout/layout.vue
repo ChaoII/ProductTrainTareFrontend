@@ -72,80 +72,85 @@ const logout = async () => {
 
 <template>
   <div class="outer">
-
-    <div class="header">
-      <el-menu class="menu center"
-               :default-active="$route.path"
-               :router="true"
-               mode="horizontal"
-               background-color="#545c64"
-               text-color="#fff"
-               active-text-color="#ffd04b"
-      >
-        <el-menu-item index="/index">
-          <el-icon>
-            <Platform/>
-          </el-icon>
-          实时展示
-        </el-menu-item>
-        <el-menu-item index="/users">
-          <el-icon>
-            <User/>
-          </el-icon>
-          用户管理
-        </el-menu-item>
-        <el-menu-item index="/setting">
-          <el-icon>
-            <Tools/>
-          </el-icon>
-          参数设置
-        </el-menu-item>
-      </el-menu>
-
-      <el-popover placement="bottom" trigger="click" :width="100" popper-style="padding: 0px;"
-                  popper-class="customPopper">
-        <template #default>
-          <div class="center btn-content">
-            <div class="popper_btn">
-              <el-button type="primary" link icon="Key" @click="dialogModifyVisible=true">修改密码</el-button>
-            </div>
-            <div class="popper_btn">
-              <el-button type="primary" link icon="SwitchButton" @click="logout">退出登录</el-button>
-            </div>
-          </div>
-        </template>
-        <template #reference>
-          <el-button type="primary" icon="Avatar" link>{{ store.$state.username }}</el-button>
-        </template>
-      </el-popover>
-      <el-dialog v-model="dialogModifyVisible" title="修改密码">
-        <el-form
-            ref="passwordModifyForm"
-            :model="formAddData"
-            :rules="rules"
-            label-width="180px"
-            label-position="right"
+    <div class="layout_header_container">
+      <div class="layout_header_left center">
+        <el-text type="primary" style="font-size: 26px; font-weight: bold">火车车厢智能识别系统</el-text>
+      </div>
+      <div class="layout_header_center center">
+        <el-menu class="menu center"
+                 :default-active="$route.path"
+                 :router="true"
+                 mode="horizontal"
+                 background-color="#545c64"
+                 text-color="#fff"
+                 active-text-color="#ffd04b"
         >
-          <el-form-item label="旧密码：" prop="oldPassword">
-            <el-input type="password" v-model="formAddData.oldPassword" placeholder="请输入旧密码"/>
-          </el-form-item>
-          <el-form-item label="新密码：" prop="newPassword">
-            <el-input type="password" v-model="formAddData.newPassword" placeholder="请输入新密码"/>
-          </el-form-item>
-          <el-form-item label="确认新密码：" prop="confirmPassword">
-            <el-input type="password" v-model="formAddData.confirmPassword" placeholder="请重复新密码"/>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <div>
-            <el-button
-                @click="dialogModifyVisible = false;formAddData.oldPassword='';formAddData.newPassword='';formAddData.confirmPassword=''">
-              取消
-            </el-button>
-            <el-button type="primary" @click="submitForm(passwordModifyForm)">确定</el-button>
-          </div>
-        </template>
-      </el-dialog>
+          <el-menu-item index="/index">
+            <el-icon>
+              <Platform/>
+            </el-icon>
+            实时展示
+          </el-menu-item>
+          <el-menu-item index="/users">
+            <el-icon>
+              <User/>
+            </el-icon>
+            用户管理
+          </el-menu-item>
+          <el-menu-item index="/setting">
+            <el-icon>
+              <Tools/>
+            </el-icon>
+            参数设置
+          </el-menu-item>
+        </el-menu>
+      </div>
+      <div class="layout_header_right center">
+        <el-popover placement="bottom" trigger="click" :width="100" popper-style="padding: 0px;"
+                    popper-class="customPopper">
+          <template #default>
+            <div class="center btn-content">
+              <div class="popper_btn">
+                <el-button type="primary" link icon="Key" @click="dialogModifyVisible=true">修改密码</el-button>
+              </div>
+              <div class="popper_btn">
+                <el-button type="primary" link icon="SwitchButton" @click="logout">退出登录</el-button>
+              </div>
+            </div>
+          </template>
+          <template #reference>
+            <el-button type="primary" icon="Avatar" link>{{ store.$state.nickname }}</el-button>
+          </template>
+        </el-popover>
+        <el-dialog v-model="dialogModifyVisible" title="修改密码">
+          <el-form
+              ref="passwordModifyForm"
+              :model="formAddData"
+              :rules="rules"
+              label-width="180px"
+              label-position="right"
+          >
+            <el-form-item label="旧密码：" prop="oldPassword">
+              <el-input type="password" v-model="formAddData.oldPassword" placeholder="请输入旧密码"/>
+            </el-form-item>
+            <el-form-item label="新密码：" prop="newPassword">
+              <el-input type="password" v-model="formAddData.newPassword" placeholder="请输入新密码"/>
+            </el-form-item>
+            <el-form-item label="确认新密码：" prop="confirmPassword">
+              <el-input type="password" v-model="formAddData.confirmPassword" placeholder="请重复新密码"/>
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <div>
+              <el-button
+                  @click="dialogModifyVisible = false;formAddData.oldPassword='';formAddData.newPassword='';formAddData.confirmPassword=''">
+                取消
+              </el-button>
+              <el-button type="primary" @click="submitForm(passwordModifyForm)">确定</el-button>
+            </div>
+          </template>
+        </el-dialog>
+      </div>
     </div>
     <div class="main center">
       <router-view></router-view>
@@ -187,6 +192,28 @@ body {
   align-items: center;
 }
 
+.layout_header_container {
+  background: #545c64;
+  width: 100%;
+  height: 50px;
+  display: flex;
+}
+
+.layout_header_left {
+  width: 20%;
+  background: #545c64;
+}
+
+.layout_header_center {
+  width: 60%;
+  background: #545c64;
+}
+
+.layout_header_right {
+  width: 20%;
+  background: #545c64;
+}
+
 .outer {
   height: 100vh;
   padding: 0;
@@ -194,7 +221,7 @@ body {
 }
 
 .menu {
-  width: 60%;
+  width: 100%;
   height: 52px;
 }
 </style>
