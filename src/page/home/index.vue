@@ -2,13 +2,15 @@
 
 import {ArrowLeftBold, ArrowRightBold, Search} from '@element-plus/icons-vue'
 import type {Ref} from 'vue'
-import {onMounted, reactive, ref, watch} from 'vue'
+import {onMounted, onUnmounted, reactive, ref, watch} from 'vue'
 import {getComingTimeApi, getHistoryApi, updateHistoryApi} from "@/api/history";
 import type {OptionsInterface, TableDataInterface} from "@/page/home/interface";
 import {host} from "@/utils/service";
 import type {GetHistoryInterface, UpdateHistoryInterface} from "@/api/interface";
 import type {FormInstance, FormRules} from "element-plus";
 import {ElMessage} from "element-plus";
+import flvjs from 'flv.js'
+
 
 const currentDate = new Date()
 const currentDay = currentDate.getDate();
@@ -163,6 +165,7 @@ onMounted(async () => {
   await setTableHeight();
   await setVideoWidth();
   await initBtn()
+  await playHttpFlv()
 })
 
 
@@ -186,7 +189,6 @@ const next_ = () => {
   }
   curIndex.value++;
 }
-
 
 
 const initBtn = async () => {
@@ -237,42 +239,40 @@ watch(curIndex, (newValue, oldValue) => {
 }, {deep: true})
 
 const videoElement = ref<HTMLElement | null>(null);
+const videoContainer = ref<HTMLElement | null>(null);
 const videoWidth = ref(0)
 const setVideoWidth = async () => {
-  const ele = videoElement.value as HTMLElement;
+  const ele = videoContainer.value as HTMLElement;
   if (ele) {
     videoWidth.value = ele.offsetWidth;
-    playerOptions.width = `${videoWidth.value}px`
   }
 }
 window.addEventListener('resize', setTableHeight);
 window.addEventListener('resize', setVideoWidth);
 
-const url = ref("http://127.0.0.1:8090/video/juren.mp4")
-const playerOptions = reactive({
-  width: "550px",
-  height: "300px", //播放器高度
-  color: "#409eff", //主题色
-  title: "", //视频名称
-  src: "http://127.0.0.1:8090/video/juren.mp4", //视频源
-  muted: false, //静音
-  webFullScreen: false,
-  speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
-  autoPlay: false, //自动播放
-  loop: false, //循环播放
-  mirror: false, //镜像画面
-  ligthOff: false, //关灯模式
-  volume: 0.3, //默认音量大小
-  control: true, //是否显示控制
-  controlBtns: [
-    "audioTrack",
-    "quality",
-    "speedRate",
-    "volume",
-    "setting",
-    "pip",
-  ], //显示所有按钮,
-});
+const flvPlayer: Ref<flvjs.Player | undefined> = ref()
+
+const playHttpFlv = async () => {
+  if (flvjs.isSupported()) {
+    const ele = videoElement.value as HTMLElement;
+    flvPlayer.value = flvjs.createPlayer({
+      type: 'flv',
+      isLive: true,
+      hasAudio: false,
+      url: 'http://127.0.0.1/live/0.live.flv'
+    });
+    flvPlayer.value?.attachMediaElement(<HTMLMediaElement>ele);
+    flvPlayer.value?.load();
+    flvPlayer.value?.play();
+  }
+}
+
+onUnmounted(() => {
+  flvPlayer.value?.pause();
+  flvPlayer.value?.unload();
+  flvPlayer.value?.detachMediaElement();
+  flvPlayer.value?.destroy();
+})
 
 
 </script>
@@ -281,9 +281,8 @@ const playerOptions = reactive({
     <el-card style="height: 300px" :body-style="{ padding: '0px' }">
       <el-row :gutter="8">
         <el-col :span="12">
-          <div ref="videoElement" style="width: 100%;height: 300px">
-            <vue3VideoPlay style="width: 100%;height: 300px" v-bind="playerOptions"
-                           :poster="url"></vue3VideoPlay>
+          <div ref="videoContainer" style="width: 100%;height: 300px">
+            <video ref="videoElement" controls autoplay muted :width="videoWidth" height="300"></video>
           </div>
         </el-col>
         <el-col :span="12">
