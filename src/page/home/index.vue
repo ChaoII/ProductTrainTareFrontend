@@ -47,6 +47,7 @@ const setTableHeight = async () => {
   }
 };
 
+
 const getHistory = async () => {
   const res = await getComingTimeApi({
     startTime: dateTimeStart.value,
@@ -162,7 +163,6 @@ const submitTrainDetailForm = async (formEl: FormInstance | undefined) => {
 const tableData: Ref<TableDataInterface[]> = ref([])
 
 const tempTableData1: Ref<TableDataInterface[]> = ref([])
-const timer: Ref<number> = ref(0);
 onMounted(async () => {
   await setTableHeight();
   await setVideoWidth();
@@ -265,8 +265,8 @@ const playHttpFlv = async () => {
       url: mediaStore.getMediaAddress()
     }, {
       enableWorker: true, //启用 Web Worker 进程来加速视频的解码和处理过程
-      enableStashBuffer: true, // 启用数据缓存机制，提高视频的流畅度和稳定性。
-      stashInitialSize: 1024 * 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
+      enableStashBuffer: false, // 启用数据缓存机制，提高视频的流畅度和稳定性。
+      stashInitialSize: 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
       seekType: 'range', // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
       lazyLoad: false, //关闭懒加载模式，从而提高视频的实时性。建议针对直播：调整为false
       lazyLoadMaxDuration: 0.2, // 懒加载的最大时长。单位：秒。建议针对直播：调整为200毫秒
@@ -276,15 +276,42 @@ const playHttpFlv = async () => {
     flvPlayer.value?.load();
     flvPlayer.value?.play();
   }
+  await startTimer()
 }
+
+const timer: Ref<number> = ref(0);
+const startTimer = async () => {
+  timer.value = window.setInterval(async () => {
+    if (flvPlayer.value) {
+      if (flvPlayer.value?.buffered) {
+        let end = flvPlayer.value?.buffered.end(0)
+        let diff = end - flvPlayer.value?.currentTime;
+        if (diff >= 5) {
+          const dt = flvPlayer.value?.buffered.end(0)
+          if (dt != undefined) {
+            flvPlayer.value.currentTime = dt-1
+          }
+        }
+      }
+    }
+  }, 5000)
+}
+
+const stopTimer = async () => {
+  await clearInterval(timer.value)
+}
+
+onMounted(async () => {
+
+})
 
 onUnmounted(() => {
   flvPlayer.value?.pause();
   flvPlayer.value?.unload();
   flvPlayer.value?.detachMediaElement();
   flvPlayer.value?.destroy();
+  stopTimer();
 })
-
 
 </script>
 <template>
