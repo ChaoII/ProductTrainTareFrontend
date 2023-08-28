@@ -10,6 +10,7 @@ import type {GetHistoryInterface, UpdateHistoryInterface} from "@/api/interface"
 import type {FormInstance, FormRules} from "element-plus";
 import {ElMessage} from "element-plus";
 import flvjs from 'flv.js'
+import {useMediaAddress} from "@/stores/userInfo";
 
 
 const currentDate = new Date()
@@ -19,6 +20,7 @@ currentDate.setDate(previousDay)
 const totalPage = ref(0)
 const dateTimeStart = ref<Date>(new Date())
 const dateTimeEnd = ref<Date>(currentDate)
+const mediaStore = useMediaAddress()
 
 const optionValue = ref("")
 const options: Ref<OptionsInterface[]> = ref([]);
@@ -259,7 +261,16 @@ const playHttpFlv = async () => {
       type: 'flv',
       isLive: true,
       hasAudio: false,
-      url: 'http://127.0.0.1/live/0.live.flv'
+      // url: 'http://127.0.0.1/live/0.live.flv'
+      url: mediaStore.getMediaAddress()
+    }, {
+      enableWorker: true, //启用 Web Worker 进程来加速视频的解码和处理过程
+      enableStashBuffer: true, // 启用数据缓存机制，提高视频的流畅度和稳定性。
+      stashInitialSize: 1024 * 1024, // 初始缓存大小。单位：字节。建议针对直播：调整为1024kb
+      seekType: 'range', // 建议将其设置为“range”模式，以便更快地加载视频数据，提高视频的实时性。
+      lazyLoad: false, //关闭懒加载模式，从而提高视频的实时性。建议针对直播：调整为false
+      lazyLoadMaxDuration: 0.2, // 懒加载的最大时长。单位：秒。建议针对直播：调整为200毫秒
+      deferLoadAfterSourceOpen: false // 不预先加载视频数据，在 MSE（Media Source Extensions）打开后立即加载数据，提高视频的实时性。建议针对直播：调整为false
     });
     flvPlayer.value?.attachMediaElement(<HTMLMediaElement>ele);
     flvPlayer.value?.load();

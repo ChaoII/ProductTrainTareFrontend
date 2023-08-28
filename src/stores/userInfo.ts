@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import type {AuthInfo, UserInfo} from '@/stores/interface'
+import type {AuthInfo, MediaInfo, UserInfo} from '@/stores/interface'
 
 export const useUserInfo = defineStore('userInfo', {
     state: (): UserInfo => {
@@ -26,6 +26,30 @@ export const useUserInfo = defineStore('userInfo', {
     },
     persist: {
         key: "userInfo",
+    },
+})
+
+
+export const useMediaAddress = defineStore('mediaAddress', {
+    state: (): MediaInfo => {
+        return {
+            mediaAddress: ""
+        }
+    },
+    actions: {
+        setMediaAddress(data: MediaInfo) {
+            this.mediaAddress = data.mediaAddress
+        },
+
+        removeMediaAddress() {
+            this.mediaAddress = ""
+        },
+        getMediaAddress() {
+            return this.mediaAddress
+        },
+    },
+    persist: {
+        key: "mediaAddress",
     },
 })
 

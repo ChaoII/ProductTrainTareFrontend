@@ -6,9 +6,13 @@ export interface UserInfo {
     token: string
 }
 
+export interface MediaInfo {
+    mediaAddress: string
+}
+
 export interface AuthInfo {
     username: string
     password: string
-    isRemember:boolean
+    isRemember: boolean
 }
 

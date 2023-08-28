@@ -43,6 +43,7 @@ export interface SettingFormInterface {
     distanceCamera: number
     deviceName: string
     cameraAddress: string
+    mediaAddress: string
     customParam: string
     currentDateTime: Date
     deviceVersion: string

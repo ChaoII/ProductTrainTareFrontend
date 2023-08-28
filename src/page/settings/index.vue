@@ -5,15 +5,18 @@ import type {FormInstance} from 'element-plus'
 import type {SettingFormInterface} from "@/api/interface";
 import {getSettingsApi, restartDeviceApi, updateSettingApi} from "@/api/settings";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {useMediaAddress} from "@/stores/userInfo";
 
 
 const curDateTime = ref<Date>()
+const mediaStore = useMediaAddress()
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<SettingFormInterface>({
   distanceSteel: 0,
   distanceCamera: 0,
   deviceName: "-",
   cameraAddress: "-",
+  mediaAddress: "-",
   customParam: "-",
   currentDateTime: new Date(),
   deviceVersion: "-",
@@ -32,7 +35,6 @@ const stopTimer = async () => {
   await clearInterval(timer.value)
 }
 
-
 onMounted(async () => {
   ruleForm.currentDateTime = new Date()
   await startTimer();
@@ -49,10 +51,12 @@ const getSettings = async () => {
     ruleForm.distanceCamera = result.data.distanceCamera
     ruleForm.deviceName = result.data.deviceName
     ruleForm.cameraAddress = result.data.cameraAddress
+    ruleForm.mediaAddress = result.data.mediaAddress
     ruleForm.customParam = result.data.customParam
     ruleForm.deviceVersion = result.data.deviceVersion
     ruleForm.algorithmVersion = result.data.algorithmVersion
     ruleForm.systemVersion = result.data.systemVersion
+    mediaStore.setMediaAddress({mediaAddress: result.data.mediaAddress})
   }
 }
 
@@ -120,6 +124,9 @@ const modifyDateTime = async () => {
           <el-input style="padding-right: 20px" v-model="ruleForm.cameraAddress"/>
           <el-button type="primary" @click="jumpLink">跳转</el-button>
         </div>
+      </el-form-item>
+      <el-form-item label="拉流地址：" prop="mediaAddress">
+        <el-input v-model="ruleForm.mediaAddress"/>
       </el-form-item>
       <el-form-item label="参数因子：" prop="customParam">
         <el-input v-model="ruleForm.customParam"/>
